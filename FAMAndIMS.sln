@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35004.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FAMAndIMS", "FAMAndIMS\FAMAndIMS.csproj", "{8AC51A38-3B06-4FB6-9D47-F78A9100D8BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FAMAndIMS.Data", "FAMAndIMS.Data\FAMAndIMS.Data.csproj", "{81FFE039-F86A-46CD-9190-D71A8B904F29}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8AC51A38-3B06-4FB6-9D47-F78A9100D8BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AC51A38-3B06-4FB6-9D47-F78A9100D8BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AC51A38-3B06-4FB6-9D47-F78A9100D8BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AC51A38-3B06-4FB6-9D47-F78A9100D8BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81FFE039-F86A-46CD-9190-D71A8B904F29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81FFE039-F86A-46CD-9190-D71A8B904F29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81FFE039-F86A-46CD-9190-D71A8B904F29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81FFE039-F86A-46CD-9190-D71A8B904F29}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {98C91A43-E451-4C59-B0D3-F889C21C17B9}
+	EndGlobalSection
+EndGlobal

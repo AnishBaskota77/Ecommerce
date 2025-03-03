@@ -1,0 +1,65 @@
+﻿@using FAMAndIMS.Data.Model.InventoryManagementModel.ItemsModel
+@model ItemsVM
+<form id="saveItems" enctype="multipart/form-data" class="form-horizontal auth-form" method="post" autocomplete="off">
+    <div class="card card-one">
+        <ul>
+            @if (ViewBag.Error is not null)
+            {
+                @foreach (var error in ViewBag.Error)
+                {
+                    <li class="text-danger">@error</li>
+                }
+            }
+        </ul>
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="ItemName" class="form-label">Item Name<span style="color:firebrick">*</span></label>
+                        <input asp-for="ItemName" type="text" class="form-control" id="ItemName" placeholder="">
+                        <span class="text-danger" asp-validation-for="ItemName"></span>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Is Active</label>
+                        <span class="text-danger" asp-validation-for="IsActive"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="UnitId">Unit<span style="color:firebrick">*</span></label>
+                        <select asp-for="UnitId" id="UnitId" class="form-select form-control" asp-items="ViewBag.unitDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Category </option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="UnitId"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-dark waves-effect" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" type="submit">Submit <i class="ri-send-plane-fill"></i></button>
+        </div>
+        <!-- card-body -->
+    </div><!-- card -->
+    </div>
+</form>
+<script>
+
+    FormHandler.init({
+        method: 'POST',
+        actionUrl: '@Url.Action("SaveItems", "Items")',
+        containerSelector: '#add-new .modal-body',
+        selector: '#saveItems'
+    }, function () {
+        $("#add-new .modal-body").html("");
+        $("#add-new .modal-title").html("");
+        $("#add-new").modal('hide');
+
+        Pagination.getData();
+    });
+    $(document).ready(function () {
+        document.getElementById("flexSwitchCheckDefault").checked = true;
+    })
+</script>

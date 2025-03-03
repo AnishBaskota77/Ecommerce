@@ -1,0 +1,105 @@
+﻿@using FAMAndIMS.Data.Model.AssetManagementModel.AssetAllocationModel
+@using FAMAndIMS.Data.Model.Paging
+@model PagedResponse<AssetAllocationListModel>
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <ol class="breadcrumb fs-sm mb-1">
+            <li class="breadcrumb-item"><a href="#">Asset Allocation Setup</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Asset Allocation</li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="card card-one mt-3">
+    <div class="card-header">
+        <h6 class="card-title">Asset Allocation</h6>
+        <nav class="nav nav-icon nav-icon-sm ms-auto">
+            <div class="m-2">
+                <a id="btnexportexcelAssetAllocationList" asp-controller="AssetAllocation" asp-action="" value="@ViewBag.IsExportExcel" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Export To Excell"><i data-placement="top" data-original-title="Export To Excell" data-feather="file-text"></i>Excel</a>
+            </div>
+            <div class="m-2">
+                <a id="btnexportPdfAssetAllocationList" value="@ViewBag.IsExportPdf" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Export To Pdf"><i data-feather="file-text"></i>PDF</a>
+            </div>
+            <div class="m-2">
+                <a id="btnexportcsvAssetAllocationList" value="@ViewBag.IsExportCSV" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Export To Csv" data-placement="top"><i data-feather="file-text"></i>CSV</a>
+            </div>
+            <div class="m-2">
+                @if (ViewBag.create)
+                {
+                    <a style="cursor:pointer" onclick="ShowPopUp('@Url.Action("SaveAssetAllocation","AssetAllocation")','Add Asset Allocation','modal-dialog modal-lg')" class="btn btn-primary btn-icons"><i class="ri-add-fill"></i> Add Asset Allocation</a>
+                }
+            </div>
+            <div class="m-2">
+                @if (ViewBag.create)
+                {
+                    <a style="cursor:pointer" onclick="ShowPopUp('@Url.Action("UploadBulkExcel","AssetAllocation")','Bulk Upload Excel','modal-dialog modal-md')" class="btn btn-primary btn-icons"><i class="ri-add-fill"></i> Bulk Upload Excel</a>
+                }
+            </div>
+        </nav>
+    </div>
+    <div class="card-body p-3">
+        <partial name="_PaginationHeader" />
+        <div class="table-responsive" id="AssetAllocationTableWrapper">
+            <partial name="_AssetAllocationIndex" model="@Model" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize pagination settings object
+            Pagination.init({
+                ajax: true,
+                method: 'GET',
+                browserPath: '@Context.Request.Path',
+                fetchUrl: '@Url.Action("Index", "AssetAllocation")',
+                selector: '#AssetAllocationTableWrapper'
+            });
+
+            // attach 'before' event handler to 'Pagination' object to get all field parameters for pagination
+            $(Pagination).on('before', function (e) {
+                e.preventDefault();
+
+                var usersFilterFormValues = $('#FormCashtypefilter').serializeArray();
+                $.each(usersFilterFormValues, function (i, obj) {
+                    e.payload.paramsBuilder.addParameter(obj['name'], obj['value']);
+                });
+
+                e.payload.paramsBuilder.addParameters(getPaginationFieldParams());
+            });
+
+            addUsersPageHandlers();
+            addPaginationHandlers();
+            function addUsersPageHandlers() {
+                $('#btnexportexcelAssetAllocationList').on('click', function (e) {
+                    e.preventDefault();
+                    var paramsA = {
+                        IsExport: 1
+                    };
+                    Pagination.ExportDataWithPagination('GET', paramsA, '@Url.Action("AssetAllocationListExportExcell", "AssetAllocation")');
+                    return false;
+                });
+                $('#btnexportPdfAssetAllocationList').on('click', function (e) {
+                    e.preventDefault();
+                    var paramsA = {
+                        IsExport: 1
+                    };
+                    Pagination.ExportDataWithPagination('GET', paramsA, '@Url.Action("AssetAllocationListsExportPdf", "AssetAllocation")');
+                    return false;
+                });
+                $('#btnexportcsvAssetAllocationList').on('click', function (e) {
+                    e.preventDefault();
+                    var paramsA = {
+                        IsExport: 1
+                    };
+                    Pagination.ExportDataWithPagination('GET', paramsA, '@Url.Action("AssetAllocationListExportCsv", "AssetAllocation")');
+                    return false;
+                });
+            }
+        });
+
+    </script>
+}

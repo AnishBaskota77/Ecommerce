@@ -1,0 +1,109 @@
+﻿@using FAMAndIMS.Data.Model.AssetManagementModel.AssetsModel
+@using FAMAndIMS.Data.Model.Paging
+@model PagedResponse<AssetsListModel>
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <ol class="breadcrumb fs-sm mb-1">
+            <li class="breadcrumb-item"><a href="#">Assets Setup</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Assets</li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="card card-one mt-3">
+    <div class="card-header">
+        <h6 class="card-title">Assets</h6>
+        <nav class="nav nav-icon nav-icon-sm ms-auto">
+            <div class="m-2">
+                <a id="btnexportexcelAssetsList" asp-controller="Assets" asp-action="" value="@ViewBag.IsExportExcel" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Export To Excell"><i data-placement="top" data-original-title="Export To Excell" data-feather="file-text"></i>Excel</a>
+            </div>
+            <div class="m-2">
+                <a id="btnexportPdfAssetsList" value="@ViewBag.IsExportPdf" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Export To Pdf"><i data-feather="file-text"></i>PDF</a>
+            </div>
+            <div class="m-2">
+                <a id="btnexportcsvAssetsList" value="@ViewBag.IsExportCSV" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Export To Csv" data-placement="top"><i data-feather="file-text"></i>CSV</a>
+            </div>
+            <div class="m-2">
+                @if (ViewBag.create)
+                {
+                    <a style="cursor:pointer" asp-controller="Assets" asp-action="GenerateDepreciation" class="btn btn-warning btn-icons me-3"><i class="ri-ticket-2-line"></i> Generate Depreciation</a>
+                }
+                @if (ViewBag.create)
+                {
+                    <a style="cursor:pointer" asp-controller="Assets" asp-action="SaveAssets" class="btn btn-primary btn-icons"><i class="ri-add-fill"></i> Add Assets</a>
+                }
+            </div>
+            @* <div class="m-2">
+            @if (ViewBag.create)
+            {
+            <a style="cursor:pointer" onclick="ShowPopUp('@Url.Action("UploadBulkExcel","AssetInsurance")','Bulk Upload Excel','modal-dialog modal-md')" class="btn btn-primary btn-icons"><i class="ri-add-fill"></i> Bulk Upload Excel</a>
+            }
+            </div> *@
+        </nav>
+    </div>
+    <div class="card-body p-3">
+        <partial name="_PaginationHeader" />
+        <div class="table-responsive" id="AssetsTableWrapper">
+            <partial name="_AssetsIndex" model="@Model" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize pagination settings object
+            Pagination.init({
+                ajax: true,
+                method: 'GET',
+                browserPath: '@Context.Request.Path',
+                fetchUrl: '@Url.Action("Index", "Assets")',
+                selector: '#AssetsTableWrapper'
+            });
+
+            // attach 'before' event handler to 'Pagination' object to get all field parameters for pagination
+            $(Pagination).on('before', function (e) {
+                e.preventDefault();
+
+                var usersFilterFormValues = $('#FormCashtypefilter').serializeArray();
+                $.each(usersFilterFormValues, function (i, obj) {
+                    e.payload.paramsBuilder.addParameter(obj['name'], obj['value']);
+                });
+
+                e.payload.paramsBuilder.addParameters(getPaginationFieldParams());
+            });
+
+            addUsersPageHandlers();
+            addPaginationHandlers();
+            function addUsersPageHandlers() {
+                $('#btnexportexcelAssetsList').on('click', function (e) {
+                    e.preventDefault();
+                    var paramsA = {
+                        IsExport: 1
+                    };
+                    Pagination.ExportDataWithPagination('GET', paramsA, '@Url.Action("AssetsListExportExcell", "Assets")');
+                    return false;
+                });
+                $('#btnexportPdfAssetsList').on('click', function (e) {
+                    e.preventDefault();
+                    var paramsA = {
+                        IsExport: 1
+                    };
+                    Pagination.ExportDataWithPagination('GET', paramsA, '@Url.Action("AssetsListsExportPdf", "Assets")');
+                    return false;
+                });
+                $('#btnexportcsvAssetsList').on('click', function (e) {
+                    e.preventDefault();
+                    var paramsA = {
+                        IsExport: 1
+                    };
+                    Pagination.ExportDataWithPagination('GET', paramsA, '@Url.Action("AssetsListExportCsv", "Assets")');
+                    return false;
+                });
+            }
+        });
+
+    </script>
+}

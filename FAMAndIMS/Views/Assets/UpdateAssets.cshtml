@@ -1,0 +1,297 @@
+﻿@using FAMAndIMS.Data.Model.AssetManagementModel.AssetsModel
+@model AssetsVM
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <ol class="breadcrumb fs-sm mb-1">
+            <li class="breadcrumb-item"><a href="#">Assets Setup</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Assets</li>
+        </ol>
+    </div>
+</div>
+
+<form id="updateAssets" enctype="multipart/form-data" class="form-horizontal auth-form" method="post" autocomplete="off" asp-action="UpdateAssets" asp-controller="Assets">
+    <div class="card card-one">
+        <ul>
+            @if (ViewBag.Error is not null)
+            {
+                @foreach (var error in ViewBag.Error)
+                {
+                    <li class="text-danger">@error</li>
+                }
+            }
+        </ul>
+        <div class="card-header">
+            <h6 class="card-title">Assets Form</h6>
+            <nav class="nav nav-icon nav-icon-sm ms-auto">
+                <a asp-controller="Assets" asp-action="Index" class="btn btn-primary d-flex align-items-center btn-icons">
+                    <i class="ri-arrow-left-line me-2"></i> Back
+                </a>
+            </nav>
+
+        </div>
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="AssetsName" class="form-label">Asset Name</label>
+                        <input asp-for="AssetsName" type="text" class="form-control" id="AssetsName" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="PurchaseDateBS" class="form-label">Purchase Date BS</label>
+                        <input asp-for="PurchaseDateBS" type="text" class="form-control" id="PurchaseDateBS" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Qty" class="form-label">Qty</label>
+                        <input asp-for="Qty" type="number" class="form-control" id="Qty" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="CategoryId" class="form-label">Category</label>
+                        <select asp-for="CategoryId" id="CategoryId" class="form-select form-control" asp-items="ViewBag.categoryDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Category </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="EmployeeId" class="form-label">Employee</label>
+                        <select asp-for="EmployeeId" id="EmployeeId" class="form-select form-control" asp-items="ViewBag.employeeDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Employee </option>
+                        </select>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="DepartmentId" class="form-label">Department</label>
+                        <select asp-for="DepartmentId" id="DepartmentId" class="form-select form-control" asp-items="ViewBag.departmentDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Department </option>
+                        </select>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="DepreciationRate" class="form-label">Depreciation Rate(in %)</label>
+                        <input asp-for="DepreciationRate" type="number" class="form-control" id="DepreciationRate" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="DeletionAmount" class="form-label">Deletion Amount</label>
+                        <input asp-for="DeletionAmount" type="number" class="form-control" id="DeletionAmount" placeholder="">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="MaintenanceCostAmount" class="form-label">Maintenance Cost Amount</label>
+                        <input asp-for="MaintenanceCostAmount" type="number" class="form-control" id="MaintenanceCostAmount" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="UsefulLife" class="form-label">UsefulLife</label>
+                        <input asp-for="UsefulLife" type="text" class="form-control" id="UsefulLife" placeholder="">
+                    </div>
+                    <div class="form-check form-switch">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActiveSwitch">
+                        <label class="form-check-label" for="isActiveSwitch">Is Active</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="AllocateDate" class="form-label">Allocate Date</label>
+                        <input asp-for="AllocateDate" type="date" class="form-control" id="AllocateDate" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="SubCategoryId" class="form-label">SubCategory</label>
+                        <select asp-for="SubCategoryId" id="SubCategoryId" class="form-select form-control" asp-items="ViewBag.subCategoryDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select SubCategory </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="DepreciationTypeId" class="form-label">DepreciationType</label>
+                        <select asp-for="DepreciationTypeId" id="DepreciationTypeId" class="form-select form-control" asp-items="ViewBag.depreciationTypeDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select DepreciationType </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="OpeningAmount" class="form-label">Opening Amount</label>
+                        <input asp-for="OpeningAmount" type="number" class="form-control" id="OpeningAmount" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="AdjustmentAmount" class="form-label">Adjustment Amount</label>
+                        <input asp-for="AdjustmentAmount" type="number" class="form-control" id="AdjustmentAmount" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="DeletionDate" class="form-label">Deletion Date</label>
+                        <input asp-for="DeletionDate" type="date" class="form-control" id="DeletionDate" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="CurrentMonthChargeAmount" class="form-label">Current Month Charge Amount</label>
+                        <input asp-for="CurrentMonthChargeAmount" type="number" class="form-control" id="CurrentMonthChargeAmount" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="LastMaintenanceDate" class="form-label">Last Maintenance Date</label>
+                        <input asp-for="LastMaintenanceDate" type="date" class="form-control" id="LastMaintenanceDate" placeholder="">
+                    </div>  <div class="mb-3">
+                        <label for="DepreciationRunDate" class="form-label">Depreciation Run Date</label>
+                        <input asp-for="DepreciationRunDate" type="date" class="form-control" id="DepreciationRunDate" placeholder="">
+                    </div>
+
+
+
+                </div>
+                <div class="col">
+
+                    <div class="mb-3">
+                        <label for="AllocateDateBS" class="form-label">Allocate Date BS</label>
+                        <input asp-for="AllocateDateBS" type="text" class="form-control" id="AllocateDateBS" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="SerialNumber" class="form-label">Serial Number</label>
+                        <input asp-for="SerialNumber" type="text" class="form-control" id="SerialNumber" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ConditionStatusId" class="form-label">Condition</label>
+                        <select asp-for="ConditionStatusId" id="ConditionStatusId" class="form-select form-control" asp-items="ViewBag.conditionDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Condition </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="AccumulatedDepreciationAmount" class="form-label">Accumulated Depreciation Amount</label>
+                        <input asp-for="AccumulatedDepreciationAmount" type="number" class="form-control" id="AccumulatedDepreciationAmount" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="AdditionalCostAmount" class="form-label">Additional Cost Amount</label>
+                        <input asp-for="AdditionalCostAmount" type="number" class="form-control" id="AdditionalCostAmount" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="DepreciationChargeTillLastMonth" class="form-label">Depreciation Charge Till Last Month</label>
+                        <input asp-for="DepreciationChargeTillLastMonth" type="number" class="form-control" id="DepreciationChargeTillLastMonth" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ProfitLossAmount" class="form-label">ProfitLoss Amount</label>
+                        <input asp-for="ProfitLossAmount" type="number" class="form-control" id="ProfitLossAmount" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="NextMaintenanceDate" class="form-label">Next Maintenance Date</label>
+                        <input asp-for="NextMaintenanceDate" type="date" class="form-control" id="NextMaintenanceDate" placeholder="">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Remarks" class="form-label">Remarks</label>
+                        <input asp-for="Remarks" type="text" class="form-control" id="Remarks" placeholder="">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="PurchaseDate" class="form-label">Purchase Date</label>
+                        <input asp-for="PurchaseDate" type="date" class="form-control" id="PurchaseDate" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="UnitTypeId" class="form-label">Unit</label>
+                        <select asp-for="UnitTypeId" id="UnitTypeId" class="form-select form-control" asp-items="ViewBag.unitDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Unit </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="VendorId" class="form-label">Vendor</label>
+                        <select asp-for="VendorId" id="VendorId" class="form-select form-control" asp-items="ViewBag.vendorDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Vendor </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="BranchId" class="form-label">Branch</label>
+                        <select asp-for="BranchId" id="BranchId" class="form-select form-control" asp-items="ViewBag.branchDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Branch </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="SalvageAmount" class="form-label">Salvage Amount</label>
+                        <input asp-for="SalvageAmount" type="number" class="form-control" id="SalvageAmount" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="AdditionalCostDate" class="form-label">Additional Cost Date</label>
+                        <input asp-for="AdditionalCostDate" type="date" class="form-control" id="AdditionalCostDate" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="DepreciationChargeTillToday" class="form-label">Depreciation Charge Till Today</label>
+                        <input asp-for="DepreciationChargeTillToday" type="number" class="form-control" id="DepreciationChargeTillToday" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <div class="card card-example">
+                            <div class="card-body">
+                                @if (!string.IsNullOrEmpty(Model.ImageOfAssetUrl))
+                                {
+                                    <img src="@Model.ImageOfAssetUrl"
+                                         class="img-fluid" alt="..." id="UpdateImageAsset">
+                                }
+                                else
+                                {
+                                    <img src="~/img/noimage.png"
+                                         class="img-fluid" alt="..." id="ImageOfAsset">
+                                }
+                            </div>
+                        </div>
+                        <input asp-for="ImageOfAsset" type="file" class="form-control" id="UpdateImageAsset" placeholder="" onchange="showImage(this, 'UpdateImageAsset')">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="resetForm()">Reset</button>
+            <button class="btn btn-primary m-2" type="submit">Submit <i class="ri-send-plane-fill"></i></button>
+        </div>
+        <!-- card-body -->
+    </div><!-- card -->
+</form>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+
+        var purchaseDateBS = document.getElementById("PurchaseDateBS");
+
+        purchaseDateBS.nepaliDatePicker();
+
+        var allocateDateBS = document.getElementById("AllocateDateBS");
+
+        allocateDateBS.nepaliDatePicker();
+    })
+    function resetForm() {
+        document.getElementById("AssetsName").value = "";
+        document.getElementById("PurchaseDateBS").value = "";
+        document.getElementById("Qty").value = 0;
+        document.getElementById("DeletionAmount").value = 0;
+        document.getElementById("DepreciationRunDate").value = "";
+        document.getElementById("AllocateDate").value = "";
+        document.getElementById("OpeningAmount").value = 0;
+        document.getElementById("AdjustmentAmount").value = 0;
+        document.getElementById("DeletionDate").value = "";
+        document.getElementById("CurrentMonthChargeAmount").value = 0;
+        document.getElementById("LastMaintenanceDate").value = "";
+        document.getElementById("ImageOfAsset").value = "";
+        document.getElementById("AllocateDateBS").value = "";
+        document.getElementById("SerialNumber").value = "";
+        document.getElementById("AccumulatedDepreciationAmount").value = 0;
+        document.getElementById("AdditionalCostAmount").value = 0;
+        document.getElementById("DepreciationChargeTillLastMonth").value = 0;
+        document.getElementById("AccumulatedDepreciationAmount").value = 0;
+        document.getElementById("ProfitLossAmount").value = 0;
+        document.getElementById("NextMaintenanceDate").value = "";
+        document.getElementById("Remarks").value = "";
+        document.getElementById("PurchaseDate").value = "";
+        document.getElementById("SalvageAmount").value = 0;
+        document.getElementById("DepreciationRate").value = 0;
+        document.getElementById("DeletionAmount").value = "";
+        document.getElementById("DepreciationRunDate").value = "";
+        document.getElementById("AdditionalCostDate").value = "";
+        document.getElementById("DepreciationChargeTillToday").value = 0;
+        document.getElementById("MaintenanceCostAmount").value = 0;
+        document.getElementById("UsefulLife").value = "";
+
+        document.getElementById("CategoryId").selectedIndex = 0;
+        document.getElementById("SubCategoryId").selectedIndex = 0;
+        document.getElementById("EmployeeId").selectedIndex = 0;;
+        document.getElementById("DepartmentId").selectedIndex = 0;
+        document.getElementById("DepreciationTypeId").selectedIndex = 0;;
+        document.getElementById("ConditionStatusId").selectedIndex = 0;
+        document.getElementById("UnitTypeId").selectedIndex = 0;
+        document.getElementById("VendorId").selectedIndex = 0;
+        document.getElementById("BranchId").selectedIndex = 0;
+
+        document.getElementById("isActiveSwitch").checked = false;
+    }
+</script>

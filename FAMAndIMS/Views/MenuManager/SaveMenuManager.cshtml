@@ -1,0 +1,68 @@
+﻿@using FAMAndIMS.Data.Model.MenuManagerModel
+@model MenuManagerVM
+<form id="saveMenuManager" enctype="multipart/form-data" class="form-horizontal auth-form" method="post" autocomplete="off">
+    <div class="card card-one">
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="menuTitle" class="form-label">Menu Title</label>
+                        <input asp-for="Title" type="text" class="form-control" id="menuTitle" placeholder="Menu Title">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="mainParentId">Main Parent Menu DropDown</label>
+                        <select asp-for="MainParentId" id="mainParentId" class="form-select form-control" asp-items="ViewBag.MainParentMenuList" aria-label="form-select-lg example">
+                            <option value="0"> Select Main Parent Menu </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="displayOrder" class="form-label">Display Order</label>
+                        <input asp-for="DisplayOrder" type="number" class="form-control" id="displayOrder" placeholder="1">
+                    </div>
+                    <div class="form-check form-switch">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Is Active</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="menuUrl" class="form-label">Menu Url</label>
+                        <input asp-for="MenuUrl" type="text" class="form-control" id="menuUrl" placeholder="/testmenuurl">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="subParentId">Sub Parent Menu DropDown</label>
+                        <select asp-for="SubParentId" id="subParentId" class="form-select form-control" asp-items="ViewBag.SubParentMenuList" aria-label="form-select-lg example">
+                            <option value="0"> Select Sub Parent Menu </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="icon" class="form-label">Icon Date Feather</label>
+                        <input asp-for="IconDataFeather" type="text" class="form-control" id="icon" placeholder="menu">
+                    </div>
+                </div>
+            </div>
+
+            <input asp-for="IsDeleted" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" hidden value="false">
+            <div class="modal-footer mt-3">
+                <button type="button" class="btn btn-dark waves-effect" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" type="submit">Submit <i class="ri-send-plane-fill"></i></button>
+            </div>
+            <!-- card-body -->
+        </div><!-- card -->
+    </div>
+</form>
+<script>
+
+    FormHandler.init({
+        method: 'POST',
+        actionUrl: '@Url.Action("SaveMenuManager", "MenuManager")',
+        containerSelector: '#add-new .modal-body',
+        selector: '#saveMenuManager'
+    }, function () {
+        $("#add-new .modal-body").html("");
+        $("#add-new .modal-title").html("");
+        $("#add-new").modal('hide');
+
+        Pagination.getData();
+    });
+</script>

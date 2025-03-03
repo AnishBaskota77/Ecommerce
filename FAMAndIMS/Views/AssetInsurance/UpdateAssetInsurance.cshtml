@@ -1,0 +1,88 @@
+﻿@using FAMAndIMS.Data.Model.AssetManagementModel.AssetInsuranceModel
+@model AssetInsuranceVM
+<form id="updateAssetInsurance" enctype="multipart/form-data" class="form-horizontal auth-form" method="post" autocomplete="off">
+    <div class="card card-one">
+        <ul>
+            @if (ViewBag.Error is not null)
+            {
+                @foreach (var error in ViewBag.Error)
+                {
+                    <li class="text-danger">@error</li>
+                }
+            }
+        </ul>
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="AssetId">Asset<span style="color:firebrick">*</span></label>
+                        <select asp-for="AssetId" id="AssetId" class="form-select form-control" asp-items="ViewBag.assetDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Asset </option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="AssetId"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="InsuranceCompanyId" class="form-label">Insurance Company</label>
+                        <select asp-for="InsuranceCompanyId" id="InsuranceCompanyId" class="form-select form-control" asp-items="ViewBag.insuranceDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Insurance Company </option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="InsuranceCompanyId"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="PremiumAmount" class="form-label">Premium Amount</label>
+                        <input asp-for="PremiumAmount" type="number" class="form-control" id="PremiumAmount" placeholder="">
+                        <span class="text-danger" asp-validation-for="PremiumAmount"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="IssueDate" class="form-label">Issue Date</label>
+                        <input asp-for="IssueDate" type="date" class="form-control" id="IssueDate" placeholder="">
+                        <span class="text-danger" asp-validation-for="IssueDate"></span>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Is Active</label>
+                        <span class="text-danger" asp-validation-for="IsActive"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="PremiumYear" class="form-label">Premium Year</label>
+                        <input asp-for="PremiumYear" type="text" class="form-control" id="PremiumYear" placeholder="">
+                        <span class="text-danger" asp-validation-for="PremiumYear"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="InsuranceType" class="form-label">Insurance Type</label>
+                        <input asp-for="InsuranceType" type="text" class="form-control" id="InsuranceType" placeholder="">
+                        <span class="text-danger" asp-validation-for="InsuranceType"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ExpiryDate" class="form-label">Expiry Date</label>
+                        <input asp-for="ExpiryDate" type="date" class="form-control" id="ExpiryDate" placeholder="">
+                        <span class="text-danger" asp-validation-for="ExpiryDate"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-dark waves-effect" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" type="submit">Submit <i class="ri-send-plane-fill"></i></button>
+        </div>
+        <!-- card-body -->
+    </div><!-- card -->
+    </div>
+</form>
+<script>
+
+    FormHandler.init({
+        method: 'POST',
+        actionUrl: '@Url.Action("UpdateAssetInsurance", "AssetInsurance")',
+        containerSelector: '#add-new .modal-body',
+        selector: '#updateAssetInsurance'
+    }, function () {
+        $("#add-new .modal-body").html("");
+        $("#add-new .modal-title").html("");
+        $("#add-new").modal('hide');
+
+        Pagination.getData();
+    });
+</script>

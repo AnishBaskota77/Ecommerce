@@ -1,0 +1,160 @@
+﻿@using FAMAndIMS.Data.Model.AssetManagementModel.AssetsModel.GeneratedDepreciationModel
+@using FAMAndIMS.Data.Model.Paging
+@model PagedResponse<GeneratedDepreciationList>
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <ol class="breadcrumb fs-sm mb-1">
+            <li class="breadcrumb-item"><a href="#">Assets Setup</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Assets</li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="card card-one mt-3">
+    <div class="card-header">
+        <h6 class="card-title">Assets</h6>
+        <nav class="nav nav-icon nav-icon-sm ms-auto">
+      @*       <form id="formGeneratedDepreciationListFilter" class="row row-cols-lg-auto align-items-center">
+                <div>
+                    <div class="input-group">
+
+                        <select name="Event" id="Event" class="form-select">
+                            <option value="All">All</option>
+                            <option value="CategoryWise">Category Wise</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group">
+                        <select name="CategoryId" id="CategoryId" asp-items="ViewBag.CategoryDDLList" class="form-select">
+                            <option value="All">Select Category</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group">
+                        <input name="AssetCode" type="text" class="form-control" id="AssetCode" placeholder="Asset Code" />
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group">
+                        <input name="FromDate" type="datetime-local" id="FromDate" onkeydown="return false" class="form-control" data-single-mode="true">
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group">
+                        <input name="ToDate" type="datetime-local" id="StToDateartDate" onkeydown="return false" class="form-control" data-single-mode="true">
+                    </div>
+                </div>
+                <div class="m-2">
+                    <button id="btnGeneratedDepreciation" type="button" class="btn btn-primary"><i class="las la-filter ms-1"></i> Filter</button>
+                </div>
+            </form> *@
+            <div class="m-2">
+                <a id="btnexportexcelDepreciationList" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Export To Excel"><i data-placement="top" data-original-title="Export To Excell" data-feather="file-text"></i>Excel</a>
+            </div>
+            <div class="m-2">
+                <a id="btnexportPdfDepreciationList" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Export To Pdf"><i data-feather="file-text"></i>PDF</a>
+            </div>
+            <div class="m-2">
+                <a id="btnexportcsvDepreciationList" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Export To Csv" data-placement="top"><i data-feather="file-text"></i>CSV</a>
+            </div>
+        </nav>
+    </div>
+    <div class="card-body p-3">
+        <partial name="_PaginationHeader" />
+        <div class="table-responsive" id="GeneratedDepreciationTableWrapper">
+            <partial name="_GenerateDepreciation" model="@Model" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            //hiding the category dropdown
+            var categoryDropdown = document.getElementById("CategoryId").parentElement;
+            categoryDropdown.style.display = "none";
+            // Initialize pagination settings object
+            Pagination.init({
+                ajax: true,
+                method: 'GET',
+                browserPath: '@Context.Request.Path',
+                fetchUrl: '@Url.Action("GenerateDepreciation", "Assets")',
+                selector: '#GeneratedDepreciationTableWrapper'
+            });
+
+            // attach 'before' event handler to 'Pagination' object to get all field parameters for pagination
+            $(Pagination).on('before', function (e) {
+                e.preventDefault();
+
+                var usersFilterFormValues = $('#formGeneratedDepreciationListFilter').serializeArray();
+                $.each(usersFilterFormValues, function (i, obj) {
+                    e.payload.paramsBuilder.addParameter(obj['name'], obj['value']);
+                });
+
+                e.payload.paramsBuilder.addParameters(getPaginationFieldParams());
+            });
+
+            addUsersPageHandlers();
+            addPaginationHandlers();
+            function addUsersPageHandlers() {
+
+                /* Custom Handlers */
+                $('#formGeneratedDepreciationListFilter').on('submit', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                })
+
+                $('#btnGeneratedDepreciation').on('click', function (e) {
+                    e.preventDefault();
+                    Pagination.getData();
+                    return false;
+                });
+
+                $('#btnexportexcelDepreciationList').on('click', function (e) {
+                    e.preventDefault();
+                    var paramsA = {
+                        IsExport: 1
+                    };
+                    Pagination.ExportDataWithPagination('GET', paramsA, '@Url.Action("GenerateDepreciationListExportExcel", "Assets")');
+                    return false;
+                });
+                $('#btnexportPdfDepreciationList').on('click', function (e) {
+                    e.preventDefault();
+                    var paramsA = {
+                        IsExport: 1
+                    };
+                    Pagination.ExportDataWithPagination('GET', paramsA, '@Url.Action("GenerateDepreciationListsExportPdf", "Assets")');
+                    return false;
+                });
+                $('#btnexportcsvDepreciationList').on('click', function (e) {
+                    e.preventDefault();
+                    var paramsA = {
+                        IsExport: 1
+                    };
+                    Pagination.ExportDataWithPagination('GET', paramsA, '@Url.Action("GenerateDepreciationListExportCsv", "Assets")');
+                    return false;
+                });
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var eventDropdown = document.getElementById("Event");
+            var categoryDropdown = document.getElementById("CategoryId").parentElement; // Getting the parent div
+
+            function toggleCategoryDropdown() {
+                if (eventDropdown.value === "CategoryWise") {
+                    categoryDropdown.style.display = "flex";
+                } else {
+                    categoryDropdown.style.display = "none";
+                }
+            }
+
+            eventDropdown.addEventListener("change", toggleCategoryDropdown);
+            toggleCategoryDropdown(); // Call once on page load
+        });
+    </script>
+}

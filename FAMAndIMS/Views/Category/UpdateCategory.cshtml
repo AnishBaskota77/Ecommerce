@@ -1,0 +1,59 @@
+﻿@using FAMAndIMS.Data.Model.GlobalSettingModel.CategoryModel
+@model CategoryVm
+<form id="updateCategory" enctype="multipart/form-data" class="form-horizontal auth-form" method="post" autocomplete="off">
+    <div class="card card-one">
+        <ul>
+            @if (ViewBag.Error is not null)
+            {
+                @foreach (var error in ViewBag.Error)
+                {
+                    <li class="text-danger">@error</li>
+                }
+            }
+        </ul>
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="CategoryName" class="form-label">Category Name<span style="color:firebrick">*</span></label>
+                        <input asp-for="CategoryName" type="text" class="form-control" id="CategoryName" placeholder="">
+                        <span class="text-danger" asp-validation-for="CategoryName"></span>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Is Active</label>
+                        <span class="text-danger" asp-validation-for="IsActive"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="DepreciationRate" class="form-label">Depreciation Rate (in %)<span style="color:firebrick">*</span></label>
+                        <input asp-for="DepreciationRate" type="text" class="form-control" id="DepreciationRate" placeholder="">
+                        <span class="text-danger" asp-validation-for="DepreciationRate"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-dark waves-effect" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" type="submit">Submit <i class="ri-send-plane-fill"></i></button>
+        </div>
+        <!-- card-body -->
+    </div><!-- card -->
+    </div>
+</form>
+<script>
+
+    FormHandler.init({
+        method: 'POST',
+        actionUrl: '@Url.Action("UpdateCategory", "Category")',
+        containerSelector: '#add-new .modal-body',
+        selector: '#updateCategory'
+    }, function () {
+        $("#add-new .modal-body").html("");
+        $("#add-new .modal-title").html("");
+        $("#add-new").modal('hide');
+
+        Pagination.getData();
+    });
+</script>

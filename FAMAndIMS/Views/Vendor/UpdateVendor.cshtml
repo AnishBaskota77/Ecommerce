@@ -1,0 +1,70 @@
+﻿@using FAMAndIMS.Data.Model.GlobalSettingModel.VendorModel
+@model VendorVM
+<form id="updateVendor" enctype="multipart/form-data" class="form-horizontal auth-form" method="post" autocomplete="off">
+    <div class="card card-one">
+        <ul>
+            @if (ViewBag.Error is not null)
+            {
+                @foreach (var error in ViewBag.Error)
+                {
+                    <li class="text-danger">@error</li>
+                }
+            }
+        </ul>
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="VendorName" class="form-label">Vendor Name<span style="color:firebrick">*</span></label>
+                        <input asp-for="VendorName" type="text" class="form-control" id="VendorName" placeholder="">
+                        <span class="text-danger" asp-validation-for="VendorName"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="PAN_No" class="form-label">PAN No</label>
+                        <input asp-for="PanNumber" type="text" class="form-control" id="PAN_No" placeholder="">
+                        <span class="text-danger" asp-validation-for="PanNumber"></span>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Is Active</label>
+                        <span class="text-danger" asp-validation-for="IsActive"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="Address" class="form-label">Address<span style="color:firebrick">*</span></label>
+                        <input asp-for="Address" type="text" class="form-control" id="Address" placeholder="">
+                        <span class="text-danger" asp-validation-for="Address"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ContactNumber" class="form-label">ContactNumber</label>
+                        <input asp-for="ContactNumber" type="text" class="form-control" id="ContactNumber" placeholder="">
+                        <span class="text-danger" asp-validation-for="ContactNumber"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-dark waves-effect" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" type="submit">Submit <i class="ri-send-plane-fill"></i></button>
+        </div>
+        <!-- card-body -->
+    </div><!-- card -->
+    </div>
+</form>
+<script>
+
+    FormHandler.init({
+        method: 'POST',
+        actionUrl: '@Url.Action("UpdateVendor", "Vendor")',
+        containerSelector: '#add-new .modal-body',
+        selector: '#updateVendor'
+    }, function () {
+        $("#add-new .modal-body").html("");
+        $("#add-new .modal-title").html("");
+        $("#add-new").modal('hide');
+
+        Pagination.getData();
+    });
+</script>

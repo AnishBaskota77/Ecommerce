@@ -1,0 +1,107 @@
+﻿@using FAMAndIMS.Data.Model.AssetManagementModel.AssetServicingModel
+@model AssetServicingVM
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <ol class="breadcrumb fs-sm mb-1">
+            <li class="breadcrumb-item"><a href="#">Asset Servicing Setup</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Asset Servicing</li>
+        </ol>
+    </div>
+</div>
+
+<form id="saveAssets" enctype="multipart/form-data" class="form-horizontal auth-form" method="post" autocomplete="off" asp-action="SaveAssetServicing" asp-controller="AssetServicing">
+    <div class="card card-one">
+        <ul>
+            @if (ViewBag.Error is not null)
+            {
+                @foreach (var error in ViewBag.Error)
+                {
+                    <li class="text-danger">@error</li>
+                }
+            }
+        </ul>
+        <div class="card-header">
+            <h6 class="card-title">Asset Servicing Form</h6>
+        </div>
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="AssetId" class="form-label">Asset</label>
+                        <select asp-for="AssetId" id="AssetId" class="form-select form-control" asp-items="ViewBag.assetDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Asset </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="NextServicingDate" class="form-label">Next Servicing Date</label>
+                        <input asp-for="NextServicingDate" type="date" class="form-control" id="NextServicingDate" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ServicingCharge" class="form-label">Servicing Charge </label>
+                        <input asp-for="ServicingCharge" type="number" class="form-control" id="ServicingCharge" placeholder="">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="ServicingDate" class="form-label">Servicing Date</label>
+                        <input asp-for="ServicingDate" type="date" class="form-control" id="ServicingDate" placeholder="">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="NextServicingDateBS" class="form-label">Next Servicing Date BS</label>
+                        <input asp-for="NextServicingDateBS" type="text" class="form-control" id="NextServicingDateBS" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Remarks" class="form-label">Remarks</label>
+                        <input asp-for="Remarks" type="text" class="form-control" id="Remarks" placeholder="">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="ServicingDateBS" class="form-label">Servicing Date BS</label>
+                        <input asp-for="ServicingDateBS" type="text" class="form-control" id="ServicingDateBS" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="CurrentDistanceRun" class="form-label">Current Distance Run(KM) </label>
+                        <input asp-for="CurrentDistanceRun" type="number" class="form-control" id="CurrentDistanceRun" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <div class="card card-example">
+                            <div class="card-body">
+                                <img src="~/img/noimage.png"
+                                     class="img-fluid" alt="..." id="BillImage">
+                            </div>
+                        </div>
+                        <input asp-for="BillImage" type="file" class="form-control" id="BillImage" placeholder="" onchange="showImage(this, 'BillImage')">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer mt-3">
+            <nav class="nav nav-icon nav-icon-sm ms-auto">
+                <a asp-controller="AssetServicing" asp-action="Index" class="btn btn-primary d-flex align-items-center btn-icons">
+                     Cancel
+                </a>
+            </nav>
+            <button class="btn btn-primary m-2" type="submit">Submit <i class="ri-send-plane-fill"></i></button>
+        </div>
+        <!-- card-body -->
+    </div><!-- card -->
+</form>
+<script>
+    $(document).ready(function () {
+
+        /* Select your element */
+        var purchaseDateBS = document.getElementById("ServicingDateBS");
+
+        /* Initialize Datepicker with options */
+        purchaseDateBS.nepaliDatePicker();
+
+        var allocateDateBS = document.getElementById("NextServicingDateBS");
+
+        /* Initialize Datepicker with options */
+        allocateDateBS.nepaliDatePicker();
+    })
+</script>

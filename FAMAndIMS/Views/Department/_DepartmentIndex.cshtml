@@ -1,0 +1,79 @@
+﻿@using FAMAndIMS.Data.Model.GlobalSettingModel.DepartmentModel
+@using FAMAndIMS.Data.Model.Paging
+@using FAMAndIMS.Models.Pagination
+@model PagedResponse<DepartmentListModel>
+@{
+    int Sn = 1;
+}
+<table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead>
+        <tr>
+            <th scope="col">SN</th>
+            <th scope="col">Department Name</th>
+            <th scope="col">Department Code</th>
+            <th scope="col">Status </th>
+            <th scope="col">Action  </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <th scope="row">@Sn</th>
+                <td>
+                    @item.DepartmentName
+                </td>
+                <td>
+                    @item.DepartmentCode
+                </td>
+                @if (ViewBag.update)
+                {
+                    @if (item.IsActive)
+                    {
+                        <td>
+                            <div class="form-check form-switch">
+                                <input asp-for="@item.IsActive" class="form-check-input bg-success statusCheckBox" type="checkbox" id="" onchange="changeStatus(@item.Id, this.checked,'Department','UpdateStatus')">
+                            </div>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <div class="form-check form-switch ">
+                                <input asp-for="@item.IsActive" class="form-check-input bg-danger statusCheckBox" type="checkbox" id="" onchange="changeStatus(@item.Id, this.checked,'Department','UpdateStatus')">
+                            </div>
+                        </td>
+                    }
+                }
+                else
+                {
+                    var colorClassName = item.IsActive == true ? "bg-success" : "bg-danger";
+                    <td>
+                        <div class="form-check form-switch ">
+                            <input asp-for="@item.IsActive" class="form-check-input bg-danger statusCheckBox" type="checkbox" id="" readonly>
+                        </div>
+                    </td>
+                }
+
+                <td>
+                    @if (ViewBag.update == true)
+                    {
+                        <button id="bEdit" style="cursor: pointer;" type="button" class="btn" data-toggle="tooltip" title="Edit Department" onclick="ShowPopUp('@Url.Action("UpdateDepartment", "Department", new { Id = item.Id })', 'Edit Department','modal-dialog modal-md')"><i class="ri-edit-2-line"></i></button>
+                        @* <button style="cursor: pointer;" onclick="ShowPopUp('@Url.Action("UpdateDepartment","Department",new {id=item.Id })','Edit Department')" class="dropdown-item rename"><i class="ri-edit-2-line"></i> </button> *@
+                    }
+                    @if (ViewBag.delete == true)
+                    {
+                        <button id="bEdit" style="cursor: pointer;" type="button" class="btn" data-toggle="tooltip" title="Delete Department" onclick="ShowPopUp('@Url.Action("DeleteDepartment", "Department", new { Id = item.Id })', 'Delete Department','modal-dialog modal-md')"><i class="ri-delete-bin-line"></i></button>
+
+                        @* <button style="cursor: pointer;" onclick="ShowPopUp('@Url.Action("DeleteDepartment","Department",new {id=item.Id })','Delete Department', 'modal-dialog modal-md')" class="dropdown-item delete"><i class="ri-delete-bin-line"></i> </button> *@
+                    }
+                </td>
+            </tr>
+            Sn = Sn + 1;
+        }
+
+
+    </tbody>
+</table>
+<partial name="_PaginationFooter"
+         model="new PaginationFooter(Model.PageNumber, Model.PageSize, Model.Items.Count(), Model.FilteredCount, Model.TotalCount, Model.TotalPages)" />

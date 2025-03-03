@@ -1,0 +1,75 @@
+﻿@using FAMAndIMS.Data.Model.AssetManagementModel.AssetLeasedModel
+@model AssetLeasedVM
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <ol class="breadcrumb fs-sm mb-1">
+            <li class="breadcrumb-item"><a href="#">Asset Leased Setup</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Asset Leased</li>
+        </ol>
+    </div>
+</div>
+
+<form id="updateAssetLeased" enctype="multipart/form-data" class="form-horizontal auth-form" method="post" autocomplete="off" asp-action="UpdateAssetLeased" asp-controller="AssetLeased">
+    <div class="card card-one">
+        <ul>
+            @if (ViewBag.Error is not null)
+            {
+                @foreach (var error in ViewBag.Error)
+                {
+                    <li class="text-danger">@error</li>
+                }
+            }
+        </ul>
+        <div class="card-header">
+            <h6 class="card-title">Asset Leased Form</h6>
+        </div>
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="AssetId" class="form-label">Asset</label>
+                        <select asp-for="AssetId" id="AssetId" class="form-select form-control" asp-items="ViewBag.assetDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Asset </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="NoOfDays" class="form-label">No Of Day/s</label>
+                        <input asp-for="NoOfDays" type="number" class="form-control" id="NoOfDays" placeholder="">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="PartyName" class="form-label">Party Name</label>
+                        <input asp-for="PartyName" type="text" class="form-control" id="PartyName" placeholder="">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Amount" class="form-label">Amount</label>
+                        <input asp-for="Amount" type="number" class="form-control" id="Amount" placeholder="">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="PerDayRate" class="form-label">Per Day Rate</label>
+                        <input asp-for="PerDayRate" type="number" class="form-control" id="PerDayRate" placeholder="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Remarks" class="form-label">Remarks </label>
+                        <input asp-for="Remarks" type="text" class="form-control" id="Remarks" placeholder="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer mt-3">
+            <nav class="nav nav-icon nav-icon-sm ms-auto">
+                <a asp-controller="AssetLeased" asp-action="Index" class="btn btn-primary d-flex align-items-center btn-icons">
+                    Cancel
+                </a>
+            </nav>
+            <button class="btn btn-primary m-2" type="submit">Submit <i class="ri-send-plane-fill"></i></button>
+        </div>
+        <!-- card-body -->
+    </div><!-- card -->
+</form>
+</script>

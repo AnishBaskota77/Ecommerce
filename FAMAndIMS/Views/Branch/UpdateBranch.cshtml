@@ -1,0 +1,65 @@
+﻿@using FAMAndIMS.Data.Model.GlobalSettingModel.BranchModel
+@model BranchVM
+<form id="updateBranch" enctype="multipart/form-data" class="form-horizontal auth-form" method="post" autocomplete="off">
+    <div class="card card-one">
+        <ul>
+            @if (ViewBag.Error is not null)
+            {
+                @foreach (var error in ViewBag.Error)
+                {
+                    <li class="text-danger">@error</li>
+                }
+            }
+        </ul>
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="BranchName" class="form-label">Branch Name<span style="color:firebrick">*</span></label>
+                        <input asp-for="BranchName" type="text" class="form-control" id="BranchName" placeholder="">
+                        <span class="text-danger" asp-validation-for="BranchName"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Address" class="form-label">Address<span style="color:firebrick">*</span></label>
+                        <input asp-for="Address" type="text" class="form-control" id="Address" placeholder="">
+                        <span class="text-danger" asp-validation-for="Address"></span>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Is Active</label>
+                        <span class="text-danger" asp-validation-for="IsActive"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="BranchCode" class="form-label">Branch Code</label>
+                        <input asp-for="BranchCode" type="text" class="form-control" id="BranchCode" placeholder="">
+                        <span class="text-danger" asp-validation-for="BranchCode"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-dark waves-effect" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" type="submit">Submit <i class="ri-send-plane-fill"></i></button>
+        </div>
+        <!-- card-body -->
+    </div><!-- card -->
+    </div>
+</form>
+<script>
+
+    FormHandler.init({
+        method: 'POST',
+        actionUrl: '@Url.Action("UpdateBranch", "Branch")',
+        containerSelector: '#add-new .modal-body',
+        selector: '#updateBranch'
+    }, function () {
+        $("#add-new .modal-body").html("");
+        $("#add-new .modal-title").html("");
+        $("#add-new").modal('hide');
+
+        Pagination.getData();
+    });
+</script>

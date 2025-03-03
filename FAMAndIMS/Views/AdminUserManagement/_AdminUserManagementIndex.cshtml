@@ -1,0 +1,87 @@
+﻿@using FAMAndIMS.Data.Model.EmployeeManagementModel
+@using FAMAndIMS.Data.Model.Paging
+@using FAMAndIMS.Models.Pagination
+@model PagedResponse<AdminUserManagementListModel>
+@{
+    int Sn = 1;
+}
+<table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead>
+        <tr>
+            <th scope="col">SN</th>
+            <th scope="col">UserName</th>
+            <th scope="col">Full Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Role</th>
+            <th scope="col">Status </th>
+            <th scope="col">Action  </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <th scope="row">@Sn</th>
+                <td>
+                    @item.UserName
+                </td>
+                <td>
+                    @item.FullName
+                </td>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.Role
+                </td>
+                @if (ViewBag.update)
+                {
+                    @if (item.IsActive)
+                    {
+                        <td>
+                            <div class="form-check form-switch">
+                                <input asp-for="@item.IsActive" class="form-check-input bg-success statusCheckBox" type="checkbox" id="" onchange="changeStatus(@item.Id, this.checked,'AdminUserManagement','UpdateStatus')">
+                            </div>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <div class="form-check form-switch ">
+                                <input asp-for="@item.IsActive" class="form-check-input bg-danger statusCheckBox" type="checkbox" id="" onchange="changeStatus(@item.Id, this.checked,'AdminUserManagement','UpdateStatus')">
+                            </div>
+                        </td>
+                    }
+                }
+                else
+                {
+                    var colorClassName = item.IsActive == true ? "bg-success" : "bg-danger";
+                    <td>
+                        <div class="form-check form-switch ">
+                            <input asp-for="@item.IsActive" class="form-check-input bg-danger statusCheckBox" type="checkbox" id="" readonly>
+                        </div>
+                    </td>
+                }
+                <td>
+                    @if (ViewBag.update == true)
+                    {
+                        <button id="bEdit" style="cursor: pointer;" type="button" class="btn" data-toggle="tooltip" title="Edit Admin User" onclick="ShowPopUp('@Url.Action("AdminUserUpdate", "AdminUserManagement", new { Id = item.Id })', 'Edit Admin User','modal-dialog modal-lg')"><i class="ri-edit-2-line"></i></button>
+                    }
+                    @if (ViewBag.delete == true)
+                    {
+                        <button id="bEdit" style="cursor: pointer;" type="button" class="btn" data-toggle="tooltip" title="Delete Admin User" onclick="ShowPopUp('@Url.Action("DeleteAdminUser", "AdminUserManagement", new { Id = item.Id })', 'Delete Admin User','modal-dialog modal-md')"><i class="ri-delete-bin-line"></i> </button>
+                    }
+                    @if (ViewBag.update == true)
+                    {
+                        <button id="bEdit" style="cursor: pointer;" type="button" class="btn" data-toggle="tooltip" title="Reset Password" onclick="ShowPopUp('@Url.Action("AdminUserResetPassword", "AdminUserManagement", new { Id = item.Id })', 'Reset Password','modal-dialog modal-md')"><i class="ri-arrow-right-circle-line"></i> </button>
+                    }
+                </td>
+            </tr>
+            Sn = Sn + 1;
+        }
+
+
+    </tbody>
+</table>
+<partial name="_PaginationFooter"
+         model="new PaginationFooter(Model.PageNumber, Model.PageSize, Model.Items.Count(), Model.FilteredCount, Model.TotalCount, Model.TotalPages)" />

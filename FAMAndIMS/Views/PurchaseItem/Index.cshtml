@@ -1,0 +1,99 @@
+﻿@using FAMAndIMS.Data.Model.InventoryManagementModel.PurchaseItemModel
+@using FAMAndIMS.Data.Model.Paging
+@model PagedResponse<PurchaseItemListModel>
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <ol class="breadcrumb fs-sm mb-1">
+            <li class="breadcrumb-item"><a href="#">Purchase Item Setup</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Purchase Item</li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="card card-one mt-3">
+    <div class="card-header">
+        <h6 class="card-title">Purchase Item</h6>
+        <nav class="nav nav-icon nav-icon-sm ms-auto">
+            <div class="m-2">
+                <a id="btnexportexcelPurchaseItemList" asp-controller="PurchaseItem" asp-action="" value="@ViewBag.IsExportExcel" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Export To Excell"><i data-placement="top" data-original-title="Export To Excell" data-feather="file-text"></i>Excel</a>
+            </div>
+            <div class="m-2">
+                <a id="btnexportPdfPurchaseItemList" value="@ViewBag.IsExportPdf" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Export To Pdf"><i data-feather="file-text"></i>PDF</a>
+            </div>
+            <div class="m-2">
+                <a id="btnexportcsvPurchaseItemList" value="@ViewBag.IsExportCSV" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Export To Csv" data-placement="top"><i data-feather="file-text"></i>CSV</a>
+            </div>
+            <div class="m-2">
+                @if (ViewBag.create)
+                {
+                    <a style="cursor:pointer" onclick="ShowPopUp('@Url.Action("SavePurchaseItem","PurchaseItem")','Add PurchaseItem')" class="btn btn-primary btn-icons"><i class="ri-add-fill"></i> Add PurchaseItem</a>
+                }
+            </div>
+        </nav>
+    </div>
+    <div class="card-body p-3">
+        <partial name="_PaginationHeader" />
+        <div class="table-responsive" id="PurchaseItemTableWrapper">
+            <partial name="_PurchaseItemIndex" model="@Model" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize pagination settings object
+            Pagination.init({
+                ajax: true,
+                method: 'GET',
+                browserPath: '@Context.Request.Path',
+                fetchUrl: '@Url.Action("Index", "PurchaseItem")',
+                selector: '#PurchaseItemTableWrapper'
+            });
+
+            // attach 'before' event handler to 'Pagination' object to get all field parameters for pagination
+            $(Pagination).on('before', function (e) {
+                e.preventDefault();
+
+                var usersFilterFormValues = $('#FormCashtypefilter').serializeArray();
+                $.each(usersFilterFormValues, function (i, obj) {
+                    e.payload.paramsBuilder.addParameter(obj['name'], obj['value']);
+                });
+
+                e.payload.paramsBuilder.addParameters(getPaginationFieldParams());
+            });
+
+            addUsersPageHandlers();
+            addPaginationHandlers();
+            function addUsersPageHandlers() {
+                $('#btnexportexcelPurchaseItemList').on('click', function (e) {
+                    e.preventDefault();
+                    var paramsA = {
+                        IsExport: 1
+                    };
+                    Pagination.ExportDataWithPagination('GET', paramsA, '@Url.Action("PurchaseItemListExportExcell", "PurchaseItem")');
+                    return false;
+                });
+                $('#btnexportPdfPurchaseItemList').on('click', function (e) {
+                    e.preventDefault();
+                    var paramsA = {
+                        IsExport: 1
+                    };
+                    Pagination.ExportDataWithPagination('GET', paramsA, '@Url.Action("PurchaseItemListsExportPdf", "PurchaseItem")');
+                    return false;
+                });
+                $('#btnexportcsvPurchaseItemList').on('click', function (e) {
+                    e.preventDefault();
+                    var paramsA = {
+                        IsExport: 1
+                    };
+                    Pagination.ExportDataWithPagination('GET', paramsA, '@Url.Action("PurchaseItemListExportCsv", "PurchaseItem")');
+                    return false;
+                });
+            }
+        });
+
+    </script>
+}

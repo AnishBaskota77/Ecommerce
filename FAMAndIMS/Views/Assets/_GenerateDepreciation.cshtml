@@ -1,0 +1,64 @@
+﻿@using FAMAndIMS.Data.Model.AssetManagementModel.AssetsModel.GeneratedDepreciationModel
+@using FAMAndIMS.Data.Model.Paging
+@using FAMAndIMS.Models.Pagination
+@model PagedResponse<GeneratedDepreciationList>
+@{
+    int Sn = 1;
+}
+<table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead>
+        <tr>
+            <th scope="col">SN</th>
+            <th scope="col">Asset Name</th>
+            <th scope="col">Asset Code</th>
+            <th scope="col">Category Name</th>
+            <th scope="col">Purchase Date</th>
+            <th scope="col">Opening Amount</th>
+            <th scope="col">Accumulated Depreciation Amount</th>
+            <th scope="col">Salvage Amount</th>
+            <th scope="col">Depreciation Rate</th>
+            <th scope="col">Adjustment Amount</th>
+            <th scope="col">Additional Cost Amount</th>
+            <th scope="col">Additional Cost Date</th>
+            <th scope="col">Deletion Amount</th>
+            <th scope="col">Deletion Date</th>
+            <th scope="col">Depreciation Charge Till Today</th>
+            <th scope="col">Depreciation Run Date</th>
+            <th scope="col">Current Month Charge Amount</th>
+            <th scope="col">Profit/Loss Amount</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <th scope="row">@Sn</th>
+                <td>
+                    @item.AssetName
+                </td>
+                <td>@item.AssetCode</td>
+                <td>@item.CategoryName</td>
+                <td>@item.PurchaseDate.ToString("yyyy-MM-dd")</td>
+                <td>@item.OpeningAmount</td>
+                <td>@item.AccumulatedDepreciationAmount</td>
+                <td>@item.SalvageAmount</td>
+                <td>@item.DepreciationRate</td>
+                <td>@item.AdjustmentAmount</td>
+                <td>@item.AdditionalCostAmount</td>
+                <td>@item.AdditionalCostDate</td>
+                <td>@item.DeletionAmount</td>
+                <td>@item.DeletionDate</td>
+                <td>@item.DepreciationChargeTillToday</td>
+                <td>@item.DepreciationRunDate</td>
+                <td>@item.CurrentMonthChargeAmount  </td>
+                <td>@item.ProfitLossAmount  </td>
+            </tr>
+            Sn = Sn + 1;
+        }
+
+
+    </tbody>
+</table>
+<partial name="_PaginationFooter"
+         model="new PaginationFooter(Model.PageNumber, Model.PageSize, Model.Items.Count(), Model.FilteredCount, Model.TotalCount, Model.TotalPages)" />

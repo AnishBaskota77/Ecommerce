@@ -1,0 +1,77 @@
+﻿@using FAMAndIMS.Data.Model.RoleMenuManagerModel
+@using FAMAndIMS.Data.Model.Paging
+@model PagedResponse<RoleMenuMangerListModel>
+
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <ol class="breadcrumb fs-sm mb-1">
+            <li class="breadcrumb-item"><a href="#">Role Setup</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Role Menu Manager</li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="card card-one mt-3">
+    <div class="card-header">
+        <h6 class="card-title">Role Mananger</h6>
+        <nav class="nav nav-icon nav-icon-sm ms-auto">
+            @if (ViewBag.create == true)
+            {
+                <a style="cursor:pointer" onclick="ShowPopUp('@Url.Action("SaveRoleMenuManager","RoleMenuManager")','Add Role', 'modal-dialog modal-md')" class="btn btn-primary btn-icons"><i class="ri-add-fill"></i> Add Role</a>
+            }
+        </nav>
+    </div>
+    <div class="card-body p-3">
+        <partial name="_PaginationHeader" />
+        <div class="table-responsive" id="RoleMenuManagerTableWrapper">
+            <partial name="_RoleMenuManagerIndex" model="@Model" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize pagination settings object
+            Pagination.init({
+                ajax: true,
+                method: 'GET',
+                browserPath: '@Context.Request.Path',
+                fetchUrl: '@Url.Action("Index", "RoleMenuManager")',
+                selector: '#RoleMenuManagerTableWrapper'
+            });
+
+            // attach 'before' event handler to 'Pagination' object to get all field parameters for pagination
+            $(Pagination).on('before', function (e) {
+                e.preventDefault();
+
+                var usersFilterFormValues = $('#FormCashtypefilter').serializeArray();
+                $.each(usersFilterFormValues, function (i, obj) {
+                    e.payload.paramsBuilder.addParameter(obj['name'], obj['value']);
+                });
+
+                e.payload.paramsBuilder.addParameters(getPaginationFieldParams());
+            });
+
+            addUsersPageHandlers();
+            addPaginationHandlers();
+            function addUsersPageHandlers() {
+
+                /* Custom Handlers */
+                // $('#FormCashtypefilter').on('submit', function (e) {
+                //     e.preventDefault();
+                //     e.stopPropagation();
+                // })
+
+                // $('#btnCashtypefilter').on('click', function (e) {
+                //     e.preventDefault();
+                //     Pagination.getData();
+                //     return false;
+                // });
+            }
+        });
+
+    </script>
+}

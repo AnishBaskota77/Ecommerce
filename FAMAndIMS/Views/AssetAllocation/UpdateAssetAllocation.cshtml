@@ -1,0 +1,151 @@
+﻿@using FAMAndIMS.Data.Model.AssetManagementModel.AssetAllocationModel
+@model AssetAllocationVM
+<form id="updateAssetAllocation" enctype="multipart/form-data" class="form-horizontal auth-form" method="post" autocomplete="off">
+    <div class="card card-one">
+        <ul>
+            @if (ViewBag.Error is not null)
+            {
+                @foreach (var error in ViewBag.Error)
+                {
+                    <li class="text-danger">@error</li>
+                }
+            }
+        </ul>
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="AssetId" class="form-label">Select Asset</label>
+                        <select asp-for="AssetId" id="AssetId" class="form-select form-control" asp-items="ViewBag.assetDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Asset </option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="AssetId"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="BranchId" class="form-label">Branch</label>
+                        <select asp-for="BranchId" id="BranchId" class="form-select form-control" asp-items="ViewBag.branchDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Branch </option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="BranchId"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="AllocateDate" class="form-label">Allocate Date</label>
+                        <input asp-for="AllocateDate" type="date" class="form-control" id="AllocateDate" placeholder="">
+                        <span class="text-danger" asp-validation-for="AllocateDate"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="AllocateDateBS" class="form-label">Allocate Date BS</label>
+                        <input asp-for="AllocateDateBS" type="text" class="form-control" id="AllocateDateBS" placeholder="">
+                        <span class="text-danger" asp-validation-for="AllocateDateBS"></span>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Is Active</label>
+                        <span class="text-danger" asp-validation-for="IsActive"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3" id="assetCodeDiv">
+                        <label for="AssetCode" class="form-label">Asset Code</label>
+                        <div class="input-group">
+                            <input asp-for="AssetCode" type="text" class="form-control" id="AssetCode" readonly placeholder="">
+                        </div>
+                        <span class="text-danger" asp-validation-for="AssetCode"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="EmployeeId" class="form-label">Employee</label>
+                        <select asp-for="EmployeeId" id="EmployeeId" class="form-select form-control" asp-items="ViewBag.employeeDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Employee </option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="EmployeeId"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="DepartmentId" class="form-label">Department</label>
+                        <select asp-for="DepartmentId" id="DepartmentId" class="form-select form-control" asp-items="ViewBag.departmentDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Department </option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="DepartmentId"></span>
+                    </div>
+                    <div class="mb-3 text-center">
+                        <img id="generatedBarcodeImg" src="" alt="Generated Barcode" style="display:none; max-width: 100%; height: auto; border: 1px solid #ccc; padding: 5px;">
+                    </div>
+                    <input type="hidden" asp-for="BarCodeImageUrl" id="BarCodeImageUrl">
+
+                    <div class="text-end mt-3">
+                        <button type="button" class="btn btn-success" id="generateBarcode">Generate Barcode</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-dark waves-effect" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" type="submit">Submit <i class="ri-send-plane-fill"></i></button>
+        </div>
+        <!-- card-body -->
+    </div><!-- card -->
+</form>
+
+<script>
+
+    FormHandler.init({
+        method: 'POST',
+        actionUrl: '@Url.Action("UpdateAssetAllocation", "AssetAllocation")',
+        containerSelector: '#add-new .modal-body',
+        selector: '#updateAssetAllocation'
+    }, function () {
+        $("#add-new .modal-body").html("");
+        $("#add-new .modal-title").html("");
+        $("#add-new").modal('hide');
+
+        Pagination.getData();
+    });
+    $(document).ready(function () {
+        // Initialize Nepali Date Picker
+        $("#AllocateDateBS").nepaliDatePicker({
+            container: "#add-new",
+        });
+        $("#generateBarcode").click(function () {
+
+            var assetName = $("#AssetId option:selected").text().trim();
+            var employeeName = $("#EmployeeId option:selected").text().trim();
+            var branchName = $("#BranchId option:selected").text().trim();
+            var departmentName = $("#DepartmentId option:selected").text().trim();
+            var allocateDate = $("#AllocateDate").val();
+            var assetCode = $("#AssetCode").val();
+            var allocateDateBs = $("#AllocateDateBS").val();
+
+            if (assetName === "Select Asset" || branchName === "Select Branch" || allocateDate === "" || allocateDateBs === "" || employeeName === "Select Employee" || departmentName === "Select Department") {
+                alert("Please select asset, branch, and dates before generating a barcode.");
+                return;
+            }
+          
+            $.ajax({
+                url: "/AssetAllocation/GenerateBarCodeString",
+                type: "POST",
+                data: {
+                    assetName: assetName,
+                    employeeName: employeeName,
+                    branchName: branchName,
+                    departmentName: departmentName,
+                    allocateDate: allocateDate,
+                    assetCode: assetCode,
+                    allocateDateBs: allocateDateBs,
+
+                },
+                success: function (response) {
+                  
+                    if (response && response.imageUrl) {
+                        $("#generatedBarcodeImg").attr("src", response.imageUrl).show();
+                        $("#BarCodeImageUrl").val(response.imageUrl);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Error generating barcode: " + xhr.responseText);
+                }
+            });
+        });
+
+    });
+</script>

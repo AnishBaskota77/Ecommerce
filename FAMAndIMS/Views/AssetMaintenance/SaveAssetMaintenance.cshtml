@@ -1,0 +1,103 @@
+﻿@using FAMAndIMS.Data.Model.AssetManagementModel.AssetMaintenanceModel
+@model AssetMaintenanceVM
+<form id="saveAssetMaintenance" enctype="multipart/form-data" class="form-horizontal auth-form" method="post" autocomplete="off">
+    <div class="card card-one">
+        <ul>
+            @if (ViewBag.Error is not null)
+            {
+                @foreach (var error in ViewBag.Error)
+                {
+                    <li class="text-danger">@error</li>
+                }
+            }
+        </ul>
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="AssetId">Asset<span style="color:firebrick">*</span></label>
+                        <select asp-for="AssetId" id="AssetId" class="form-select form-control" asp-items="ViewBag.assetDdlList" aria-label="form-select-lg example">
+                            <option value="0"> Select Asset </option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="AssetId"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="MaintenanceCostAmount" class="form-label">Maintenance Cost</label>
+                        <input asp-for="MaintenanceCostAmount" type="number" class="form-control" id="MaintenanceCostAmount" placeholder="">
+                        <span class="text-danger" asp-validation-for="MaintenanceCostAmount"></span>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Is Active</label>
+                        <span class="text-danger" asp-validation-for="IsActive"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="AssetCode" class="form-label">Asset Code</label>
+                        <input asp-for="AssetCode" type="text" class="form-control" id="AssetCode" placeholder="" readonly>
+                        <span class="text-danger" asp-validation-for="AssetCode"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="MaintenanceDate" class="form-label">Maintenance Date</label>
+                        <input asp-for="MaintenanceDate" type="date" class="form-control" id="MaintenanceDate" placeholder="">
+                        <span class="text-danger" asp-validation-for="MaintenanceDate"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-dark waves-effect" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" type="submit">Submit <i class="ri-send-plane-fill"></i></button>
+        </div>
+        <!-- card-body -->
+    </div><!-- card -->
+    </div>
+</form>
+<script>
+
+    FormHandler.init({
+        method: 'POST',
+        actionUrl: '@Url.Action("SaveAssetMaintenance", "AssetMaintenance")',
+        containerSelector: '#add-new .modal-body',
+        selector: '#saveAssetMaintenance'
+    }, function () {
+        $("#add-new .modal-body").html("");
+        $("#add-new .modal-title").html("");
+        $("#add-new").modal('hide');
+
+        Pagination.getData();
+    });
+
+    $(document).ready(function () {
+        document.getElementById("flexSwitchCheckDefault").checked = true;
+
+        $("#AssetId").change(function () {
+            var assetId = $(this).val();
+
+            if (assetId && assetId !== "0") {
+                debugger;
+                $.ajax({
+                    url: '@Url.Action("GetAssetCodeByAssetId", "AssetMaintenance")',
+                    type: 'GET',
+                    data: { assetId: assetId },
+                    success: function (response) {
+                        if (response.success && response.assetCode) {
+                            $("#AssetCode").val(response.assetCode);
+                        } else {
+                            $("#AssetCode").val(""); // Set to empty if null or not found
+                        }
+                    },
+                    error: function () {
+                        alert("Error occurred while fetching asset code.");
+                        $("#AssetCode").val("");
+                    }
+                });
+            } else {
+                $("#AssetCode").val("");
+            }
+        });
+    });
+
+</script>

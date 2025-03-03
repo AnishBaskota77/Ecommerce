@@ -1,0 +1,64 @@
+﻿@using FAMAndIMS.Data.Model.GlobalSettingModel.SubCategoryModel
+@using FAMAndIMS.Data.Model.Paging
+@model PagedResponse<SubCategoryListModel>
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <ol class="breadcrumb fs-sm mb-1">
+            <li class="breadcrumb-item"><a href="#">SubCategory Setup</a></li>
+            <li class="breadcrumb-item active" aria-current="page">SubCategory</li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="card card-one mt-3">
+    <div class="card-header">
+        <h6 class="card-title">SubCategory</h6>
+        <nav class="nav nav-icon nav-icon-sm ms-auto">
+            @if (ViewBag.create)
+            {
+                <a style="cursor:pointer" onclick="ShowPopUp('@Url.Action("SaveSubCategory","SubCategory")','Add SubCategory')" class="btn btn-primary btn-icons"><i class="ri-add-fill"></i> Add SubCategory</a>
+            }
+        </nav>
+    </div>
+    <div class="card-body p-3">
+        <partial name="_PaginationHeader" />
+        <div class="table-responsive" id="SubCategoryTableWrapper">
+            <partial name="_SubCategoryIndex" model="@Model" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize pagination settings object
+            Pagination.init({
+                ajax: true,
+                method: 'GET',
+                browserPath: '@Context.Request.Path',
+                fetchUrl: '@Url.Action("Index", "SubCategory")',
+                selector: '#SubCategoryTableWrapper'
+            });
+
+            // attach 'before' event handler to 'Pagination' object to get all field parameters for pagination
+            $(Pagination).on('before', function (e) {
+                e.preventDefault();
+
+                var usersFilterFormValues = $('#FormCashtypefilter').serializeArray();
+                $.each(usersFilterFormValues, function (i, obj) {
+                    e.payload.paramsBuilder.addParameter(obj['name'], obj['value']);
+                });
+
+                e.payload.paramsBuilder.addParameters(getPaginationFieldParams());
+            });
+
+            addUsersPageHandlers();
+            addPaginationHandlers();
+            function addUsersPageHandlers() {
+            }
+        });
+
+    </script>
+}

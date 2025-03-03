@@ -1,0 +1,40 @@
+﻿@using FAMAndIMS.Data.Model.RoleMenuManagerModel
+@model RoleMenuManagerVM
+<form id="updateRoleMenuManager" enctype="multipart/form-data" class="form-horizontal auth-form" method="post" autocomplete="off">
+    <div class="card card-one">
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <label for="roleName" class="form-label">Role Name</label>
+                        <input asp-for="RoleName" type="text" class="form-control" id="roleName" placeholder="Role Name">
+                    </div><div class="form-check form-switch">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Is Active</label>
+                    </div>
+                </div>
+                <input asp-for="IsDeleted" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" hidden value="false">
+            </div>
+            <div class="modal-footer mt-3">
+                <button type="button" class="btn btn-dark waves-effect" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" type="submit">Submit <i class="ri-send-plane-fill"></i></button>
+            </div>
+            <!-- card-body -->
+        </div><!-- card -->
+    </div>
+</form>
+<script>
+
+    FormHandler.init({
+        method: 'POST',
+        actionUrl: '@Url.Action("UpdateRoleMenuManager", "RoleMenuManager")',
+        containerSelector: '#add-new .modal-body',
+        selector: '#updateRoleMenuManager'
+    }, function () {
+        $("#add-new .modal-body").html("");
+        $("#add-new .modal-title").html("");
+        $("#add-new").modal('hide');
+
+        Pagination.getData();
+    });
+</script>
